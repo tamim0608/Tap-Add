@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap Add Game</title>
+    <style>
+        body {
+            background-image: url('path/to/your/tap-add-logo.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .game-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .game-container h2 {
+            margin: 10px 0;
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h2>Profile Name</h2>
+        <p>Tap Add Tokens: <span id="tokens">0</span></p>
+        <p>Balance: $<span id="balance">0.00</span></p>
+        <button id="startButton" class="button" onclick="startGame()">Start</button>
+        <p id="timerDisplay">8:00:00</p>
+    </div>
+
+    <script>
+        let tokens = 0;
+        let balance = 0;
+        let minutesEarned = 0;
+        let timer;
+        let remainingTime = 8 * 60 * 60; // 8 hours in seconds
+
+        function startGame() {
+            document.getElementById('startButton').disabled = true; // Disable start button after click
+            timer = setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    minutesEarned++;
+                    tokens++; // Earn 1 token per minute
+                    if (minutesEarned % 60 === 0) {
+                        updateDisplay();
+                    }
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timer);
+                    alert("Time's up! You've earned " + minutesEarned + " tokens.");
+                }
+            }, 1000); // Set to 1 second for real-time countdown
+        }
+
+        function updateDisplay() {
+            document.getElementById('tokens').innerText = tokens;
+            document.getElementById('balance').innerText = (tokens / 200).toFixed(2); // 200 tokens = $1
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(remainingTime / 3600);
+            const minutes = Math.floor((remainingTime % 3600) / 60);
+            const seconds = remainingTime % 60;
+            document.getElementById('timerDisplay').innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
